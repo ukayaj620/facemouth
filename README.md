@@ -6,3 +6,6 @@ Nose and Eye Feature Extractor
 - [Jayaku Briliantio](github.com/ukayaj620)
 - [Jason Alexander](github.com/FXLJA)
 - [Martien Junaedi](github.com/MartienJun)
+
+### License
+[MIT](./LICENSE)
