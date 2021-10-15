@@ -1,5 +1,5 @@
-# Nosey
-Nose and Eye Feature Extractor
+# Facemouth
+Face and Mouth Feature Extractor
 
 ### Contributors
 - [Ferdy Nicolas](github.com/ferdyferdy9)
