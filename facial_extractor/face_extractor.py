@@ -12,17 +12,22 @@ class FaceExtractor:
         self.image_bgr = cv2.imread(image_path)
         self.image_hsv = cv2.cvtColor(self.image_bgr, cv2.COLOR_BGR2HSV)
 
+    def create_kernel(self, size):
+        return np.ones((size, size), dtype=np.uint8)
+
+    def create_hsv_color_mask(self, lower, upper):
+        return cv2.inRange(self.image_hsv, np.array(lower, dtype="uint8"), np.array(upper, dtype="uint8"))
+
+    def apply_opening(self, mask, kernel):
+        return cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+
+    def apply_closing(self, mask, kernel):
+        return cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+
     def get_face_mask(self):
-        lower = np.array([0, 48, 10], dtype="uint8")
-        upper = np.array([20, 255, 255], dtype="uint8")
-
-        mask = cv2.inRange(self.image_hsv, lower, upper)
-
-        kernel_open = np.ones((9, 9), dtype=np.uint8)
-        mask_open = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel_open)
-
-        kernel_close = np.ones((199, 199), dtype=np.uint8)
-        return cv2.morphologyEx(mask_open, cv2.MORPH_CLOSE, kernel_close)
+        mask = self.create_hsv_color_mask([0, 48, 10], [20, 255, 255])
+        mask_open = self.apply_opening(mask, self.create_kernel(size=9))
+        return self.apply_closing(mask_open, self.create_kernel(size=199))
 
     def apply_mask(self, mask):
         return cv2.bitwise_and(self.image_bgr, self.image_bgr, mask=mask)
