@@ -7,10 +7,12 @@ class FaceExtractor:
     def __init__(self):
         self.image_bgr = None
         self.image_hsv = None
+        self.image_gray = None
 
     def load_image(self, image_path):
         self.image_bgr = cv2.imread(image_path)
         self.image_hsv = cv2.cvtColor(self.image_bgr, cv2.COLOR_BGR2HSV)
+        self.image_gray = cv2.cvtColor(self.image_bgr, cv2.COLOR_BGR2GRAY)
 
     def create_kernel(self, size):
         return np.ones((size, size), dtype=np.uint8)
@@ -25,7 +27,7 @@ class FaceExtractor:
         return cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
 
     def get_face_mask(self):
-        mask = self.create_hsv_color_mask([0, 48, 10], [20, 255, 255])
+        mask = self.create_hsv_color_mask([0, 48, 15], [20, 255, 255])
         mask_open = self.apply_opening(mask, self.create_kernel(size=9))
         return self.apply_closing(mask_open, self.create_kernel(size=199))
 
@@ -35,3 +37,10 @@ class FaceExtractor:
     def get_face(self):
         mask = self.get_face_mask()
         return self.apply_mask(mask)
+    
+    def get_face_contour(self):
+        mask = self.get_face_mask()
+        contours, hierarchy = cv2.findContours(image=mask, mode=cv2.RETR_TREE, method=cv2.CHAIN_APPROX_NONE)
+        image = self.image_bgr.copy()
+        cv2.drawContours(image=image, contours=contours, contourIdx=-1, color=(255, 0, 0), thickness=8, lineType=cv2.LINE_AA)
+        return image

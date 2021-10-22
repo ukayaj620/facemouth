@@ -22,10 +22,15 @@ class TestFaceExtractor(unittest.TestCase):
         plt.show()
 
     def test_apply_mask(self):
-        self.face_extractor.load_image("./data/jayaku/foto_1.jpg")
+        self.face_extractor.load_image("./data/martien/foto_1.jpg")
         image_result = self.face_extractor.apply_mask(
             self.face_extractor.get_face_mask())
+        plt.imshow(image_result[..., ::-1])
+        plt.show()
 
+    def test_face_contour(self):
+        self.face_extractor.load_image("./data/kevin/foto_1.jpg")
+        image_result = self.face_extractor.get_face_contour()
         plt.imshow(image_result[..., ::-1])
         plt.show()
 
