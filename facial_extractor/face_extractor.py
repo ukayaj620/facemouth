@@ -7,12 +7,10 @@ class FaceExtractor:
     def __init__(self):
         self.image_bgr = None
         self.image_hsv = None
-        self.image_gray = None
 
     def load_image(self, image_path):
         self.image_bgr = cv2.imread(image_path)
         self.image_hsv = cv2.cvtColor(self.image_bgr, cv2.COLOR_BGR2HSV)
-        self.image_gray = cv2.cvtColor(self.image_bgr, cv2.COLOR_BGR2GRAY)
 
     def create_kernel(self, size):
         return np.ones((size, size), dtype=np.uint8)
