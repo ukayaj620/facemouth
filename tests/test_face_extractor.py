@@ -1,5 +1,6 @@
 import unittest
 import matplotlib.pyplot as plt
+import cv2
 
 from facial_extractor.face_extractor import FaceExtractor
 
@@ -22,16 +23,34 @@ class TestFaceExtractor(unittest.TestCase):
         plt.show()
 
     def test_apply_mask(self):
-        self.face_extractor.load_image("./data/jayaku/foto_2.jpg")
-        image_result = self.face_extractor.apply_mask(
-            self.face_extractor.get_face_mask())
-        plt.imshow(image_result[..., ::-1])
+        names = ["ferdy", "jason", "jayaku", "kevin", "martien"]
+        fig = plt.figure(figsize=(10, 12))
+        columns = 5
+        rows = 6
+        for i in range(0, columns * rows):
+            name = names[(i % columns)]
+            self.face_extractor.load_image(
+                "./data/{}/foto_{}.jpg".format(name, (i % rows + 1)))
+            image = self.face_extractor.apply_mask(
+                self.face_extractor.get_face_mask())[..., ::-1]
+            fig.add_subplot(rows, columns, i + 1)
+            plt.imshow(cv2.resize(image, (300, 400)))
+
         plt.show()
 
     def test_face_contour(self):
-        self.face_extractor.load_image("./data/kevin/foto_2.jpg")
-        image_result = self.face_extractor.get_face_contour()
-        plt.imshow(image_result[..., ::-1])
+        names = ["ferdy", "jason", "jayaku", "kevin", "martien"]
+        fig = plt.figure(figsize=(10, 12))
+        columns = 5
+        rows = 6
+        for i in range(0, columns * rows):
+            name = names[(i % columns)]
+            self.face_extractor.load_image(
+                "./data/{}/foto_{}.jpg".format(name, (i % rows + 1)))
+            image = self.face_extractor.get_face_contour()[..., ::-1]
+            fig.add_subplot(rows, columns, i + 1)
+            plt.imshow(cv2.resize(image, (300, 400)))
+        
         plt.show()
 
 
