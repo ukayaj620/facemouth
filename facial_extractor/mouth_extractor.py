@@ -55,29 +55,29 @@ class MouthExtractor:
 
         return self.apply_mask(mouth_image, mouth_mask_invert)
 
-    def _sobel_mouth(self, mouth_image):
-        mouth_image_gray = cv2.cvtColor(mouth_image, cv2.COLOR_BGR2GRAY)
-        mouth_image_gray_blur = cv2.GaussianBlur(
-            mouth_image_gray, (3, 3), sigmaX=0, sigmaY=0)
-        sobelxy = cv2.Sobel(src=mouth_image_gray_blur,
-                            ddepth=cv2.CV_64F, dx=1, dy=1, ksize=31)
+    # def _sobel_mouth(self, mouth_image):
+    #     mouth_image_gray = cv2.cvtColor(mouth_image, cv2.COLOR_BGR2GRAY)
+    #     mouth_image_gray_blur = cv2.GaussianBlur(
+    #         mouth_image_gray, (3, 3), sigmaX=0, sigmaY=0)
+    #     sobelxy = cv2.Sobel(src=mouth_image_gray_blur,
+    #                         ddepth=cv2.CV_64F, dx=1, dy=1, ksize=31)
 
-        magnitude = np.sqrt(np.square(sobelxy))
-        magnitude *= 255.0 / magnitude.max()
+    #     magnitude = np.sqrt(np.square(sobelxy))
+    #     magnitude *= 255.0 / magnitude.max()
 
-        return magnitude
+    #     return magnitude
 
-    def _mouth_threshold_detection(self, mouth_image):
-        mouth_image_gray = cv2.cvtColor(mouth_image, cv2.COLOR_BGR2GRAY)
-        retval, mouth_thresh = cv2.threshold(
-            mouth_image_gray, 140, 255, cv2.THRESH_BINARY_INV)
+    # def _mouth_threshold_detection(self, mouth_image):
+    #     mouth_image_gray = cv2.cvtColor(mouth_image, cv2.COLOR_BGR2GRAY)
+    #     retval, mouth_thresh = cv2.threshold(
+    #         mouth_image_gray, 140, 255, cv2.THRESH_BINARY_INV)
 
-        open_kernel = self.create_kernel(19)
-        close_kernel = self.create_kernel(9)
-        mouth_thresh = self.apply_opening(mouth_thresh, open_kernel)
-        mouth_thresh = self.apply_closing(mouth_thresh, close_kernel)
+    #     open_kernel = self.create_kernel(19)
+    #     close_kernel = self.create_kernel(9)
+    #     mouth_thresh = self.apply_opening(mouth_thresh, open_kernel)
+    #     mouth_thresh = self.apply_closing(mouth_thresh, close_kernel)
 
-        return self.apply_mask(mouth_image, mouth_thresh)
+    #     return self.apply_mask(mouth_image, mouth_thresh)
 
     def get_image_with_face_and_mouth_boundaries(self):
         image = self.image_bgr.copy()
@@ -136,8 +136,8 @@ class MouthExtractor:
         (x, y, w, h) = rect
         return image[y:(y + h), x:(x + w)]
 
-    def get_most_bottom_rect(self, rect):
-        return sorted(rect, key=lambda _rect: _rect[1], reverse=True)[0]
+    def get_most_bottom_rect(self, rects):
+        return sorted(rects, key=lambda _rect: _rect[1], reverse=True)[0]
 
     def draw_mouth_boundaries(self, image, mouth_rect):
         self.draw_rect(image, mouth_rect, (255, 0, 0), 12)

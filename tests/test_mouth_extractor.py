@@ -17,6 +17,7 @@ class TestMouthExtractor(unittest.TestCase):
         plt.imshow(self.mouth_extractor.image_hsv)
         plt.show()
 
+    # by: Jayaku Briliantio
     def test_mouth_boundaries(self):
         names = ["ferdy", "jason", "jayaku", "kevin", "martien"]
         fig = plt.figure(figsize=(10, 12))
@@ -32,6 +33,7 @@ class TestMouthExtractor(unittest.TestCase):
 
         plt.show()
 
+    # by: Jayaku Briliantio
     def test_mouth_boundaries_personal(self):
         name = "kevin"
         fig = plt.figure(figsize=(10, 12))
@@ -47,6 +49,7 @@ class TestMouthExtractor(unittest.TestCase):
 
         plt.show()
 
+    # by: Ferdy Nicolas
     def test_mouth_clippings(self):
         names = ["ferdy", "jason", "jayaku", "kevin", "martien"]
         fig = plt.figure(figsize=(10, 12))
@@ -62,6 +65,7 @@ class TestMouthExtractor(unittest.TestCase):
 
         plt.show()
 
+    # by: Ferdy Nicolas
     def test_mouth_clipping_personal(self):
         name = "jayaku"
         fig = plt.figure(figsize=(10, 12))
