@@ -1,5 +1,6 @@
 env/
 .vscode/
+data/
 tests/data/
 **/__pycache__/**
 .idea/
