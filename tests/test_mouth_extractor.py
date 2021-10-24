@@ -26,13 +26,43 @@ class TestMouthExtractor(unittest.TestCase):
             name = names[(i % columns)]
             self.mouth_extractor.load_image(
                 "./data/{}/foto_{}.jpg".format(name, (i % rows + 1)))
-            image = self.mouth_extractor.get_mouth_boundaries()[..., ::-1]
+            image = self.mouth_extractor.get_image_with_face_and_mouth_boundaries()[..., ::-1]
             fig.add_subplot(rows, columns, i + 1)
             plt.imshow(cv2.resize(image, (300, 400)))
 
         plt.show()
 
     def test_mouth_boundaries_personal(self):
+        name = "kevin"
+        fig = plt.figure(figsize=(10, 12))
+        columns = 3
+        rows = 2
+        for i in range(1, columns * rows + 1):
+            self.mouth_extractor.load_image(
+                "./data/{}/foto_{}.jpg".format(name, i))
+            image = self.mouth_extractor.get_image_with_face_and_mouth_boundaries()[..., ::-1]
+
+            fig.add_subplot(rows, columns, i)
+            plt.imshow(cv2.resize(image, (300, 400)))
+
+        plt.show()
+
+    def test_mouth_clippings(self):
+        names = ["ferdy", "jason", "jayaku", "kevin", "martien"]
+        fig = plt.figure(figsize=(10, 12))
+        columns = 5
+        rows = 6
+        for i in range(0, columns * rows):
+            name = names[(i % columns)]
+            self.mouth_extractor.load_image(
+                "./data/{}/foto_{}.jpg".format(name, (i % rows + 1)))
+            image = self.mouth_extractor.get_image_mouth()[..., ::-1]
+            fig.add_subplot(rows, columns, i + 1)
+            plt.imshow(image)
+
+        plt.show()
+
+    def test_mouth_clipping_personal(self):
         name = "jayaku"
         fig = plt.figure(figsize=(10, 12))
         columns = 3
@@ -40,8 +70,9 @@ class TestMouthExtractor(unittest.TestCase):
         for i in range(1, columns * rows + 1):
             self.mouth_extractor.load_image(
                 "./data/{}/foto_{}.jpg".format(name, i))
-            image = self.mouth_extractor.get_mouth_boundaries()[..., ::-1]
+            image = self.mouth_extractor.get_image_mouth()[..., ::-1]
+
             fig.add_subplot(rows, columns, i)
-            plt.imshow(cv2.resize(image, (300, 400)))
+            plt.imshow(image, cmap="gray")
 
         plt.show()
