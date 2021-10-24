@@ -53,6 +53,35 @@ class TestFaceExtractor(unittest.TestCase):
         
         plt.show()
 
+    def test_apply_mask_personal(self):
+        name = "jayaku"
+        fig = plt.figure(figsize=(10, 12))
+        columns = 3
+        rows = 2
+        for i in range(1, columns * rows + 1):
+            self.face_extractor.load_image(
+                "./data/{}/foto_{}.jpg".format(name, i))
+            image = self.face_extractor.apply_mask(
+                self.face_extractor.get_face_mask())[..., ::-1]
+            fig.add_subplot(rows, columns, i)
+            plt.imshow(cv2.resize(image, (300, 400)))
+
+        plt.show()
+
+    def test_face_contour_personal(self):
+        name = "jayaku"
+        fig = plt.figure(figsize=(10, 12))
+        columns = 3
+        rows = 2
+        for i in range(1, columns * rows + 1):
+            self.face_extractor.load_image(
+                "./data/{}/foto_{}.jpg".format(name, i))
+            image = self.face_extractor.get_face_contour()[..., ::-1]
+            fig.add_subplot(rows, columns, i)
+            plt.imshow(cv2.resize(image, (300, 400)))
+
+        plt.show()
+
 
 if __name__ == "__main__":
     unittest.main()

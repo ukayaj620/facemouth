@@ -20,7 +20,7 @@ class MouthExtractor:
 
     def get_face_roi(self, image_gray):
         return self.face_cascade.detectMultiScale(image_gray, scaleFactor=1.05,
-                                                  minNeighbors=5, minSize=(500, 500),
+                                                  minNeighbors=5, minSize=(200, 200),
                                                   flags=cv2.CASCADE_SCALE_IMAGE)
 
     def get_mouth_roi(self, face_image_gray, face_rect):
@@ -28,7 +28,7 @@ class MouthExtractor:
         face_image_gray_cropped = face_image_gray[fy +
                                                   int(fh * 0.5):fy + fh, fx:fx + fw]
         return self.mouth_cascade.detectMultiScale(
-            face_image_gray_cropped, scaleFactor=1.1, minNeighbors=10, minSize=(300, 200), flags=cv2.CASCADE_SCALE_IMAGE)
+            face_image_gray_cropped, scaleFactor=1.1, minNeighbors=10, minSize=(100, 100), flags=cv2.CASCADE_SCALE_IMAGE)
 
     def draw_mouth_boundaries(self, image, face_rect, mouth_rects):
         sorted_mouth_rect = sorted(mouth_rects, key=lambda rect: rect[1], reverse=True)
@@ -58,5 +58,5 @@ class MouthExtractor:
 
         self.draw_mouth_boundaries(image, face_rect, mouth_rects)
         self.draw_face_boundaries(image, face_rect)
-        
+
         return image

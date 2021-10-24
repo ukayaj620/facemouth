@@ -33,7 +33,7 @@ class TestMouthExtractor(unittest.TestCase):
         plt.show()
 
     def test_mouth_boundaries_personal(self):
-        name = "martien"
+        name = "jayaku"
         fig = plt.figure(figsize=(10, 12))
         columns = 3
         rows = 2
