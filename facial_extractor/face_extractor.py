@@ -35,10 +35,12 @@ class FaceExtractor:
     def get_face(self):
         mask = self.get_face_mask()
         return self.apply_mask(mask)
-    
+
     def get_face_contour(self):
         mask = self.get_face_mask()
-        contours, hierarchy = cv2.findContours(image=mask, mode=cv2.RETR_TREE, method=cv2.CHAIN_APPROX_NONE)
+        contours, hierarchy = cv2.findContours(
+            image=mask, mode=cv2.RETR_TREE, method=cv2.CHAIN_APPROX_NONE)
         image = self.image_bgr.copy()
-        cv2.drawContours(image=image, contours=contours, contourIdx=-1, color=(255, 0, 0), thickness=8, lineType=cv2.LINE_AA)
+        cv2.drawContours(image=image, contours=contours, contourIdx=-1,
+                         color=(0, 255, 0), thickness=8, lineType=cv2.LINE_AA)
         return image

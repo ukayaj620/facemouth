@@ -21,6 +21,21 @@ class TestFaceExtractor(unittest.TestCase):
         self.face_extractor.load_image("./data/jayaku/foto_1.jpg")
         plt.imshow(self.face_extractor.get_face_mask())
         plt.show()
+    
+    def test_face_mask(self):
+        names = ["ferdy", "jason", "jayaku", "kevin", "martien"]
+        fig = plt.figure(figsize=(10, 12))
+        columns = 5
+        rows = 6
+        for i in range(0, columns * rows):
+            name = names[(i % columns)]
+            self.face_extractor.load_image(
+                "./data/{}/foto_{}.jpg".format(name, (i % rows + 1)))
+            image = self.face_extractor.get_face_mask()
+            fig.add_subplot(rows, columns, i + 1)
+            plt.imshow(cv2.resize(image, (300, 400)), cmap="gray")
+
+        plt.show()
 
     def test_apply_mask(self):
         names = ["ferdy", "jason", "jayaku", "kevin", "martien"]

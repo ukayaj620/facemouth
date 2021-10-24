@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from matplotlib import pyplot as plt
+import os
 
 
 class MouthExtractor:
@@ -10,9 +10,9 @@ class MouthExtractor:
         self.image_hsv = None
         self.image_gray = None
         self.face_cascade = cv2.CascadeClassifier(
-            './../haar_features/haarcascade_frontalface_alt.xml')
+            os.getcwd() + './haar_features/haarcascade_frontalface_alt.xml')
         self.mouth_cascade = cv2.CascadeClassifier(
-            './../haar_features/haarcascade_mcs_mouth.xml')
+            os.getcwd() + './haar_features/haarcascade_mcs_mouth.xml')
 
     def load_image(self, image_path):
         self.image_bgr = cv2.imread(image_path)
@@ -35,7 +35,8 @@ class MouthExtractor:
         return cv2.inRange(image_hsv, np.array(lower, dtype="uint8"), np.array(upper, dtype="uint8"))
 
     def get_mouth_mask(self, image_hsv):
-        mask = self.create_hsv_color_mask(image_hsv, [4, 48, 15], [20, 255, 255])
+        mask = self.create_hsv_color_mask(
+            image_hsv, [4, 48, 15], [20, 255, 255])
         mask_closing = self.apply_closing(mask, self.create_kernel(size=9))
         return self.apply_opening(mask_closing, self.create_kernel(size=9))
 
@@ -44,7 +45,8 @@ class MouthExtractor:
         if len(mouth_rects) == 0:
             return self.image_bgr
         mouth_rect = self.get_most_bottom_rect(mouth_rects)
-        mouth_image = self.get_image_slice_from_rect(self.image_bgr, mouth_rect)
+        mouth_image = self.get_image_slice_from_rect(
+            self.image_bgr, mouth_rect)
 
         mouth_image_hsv = cv2.cvtColor(mouth_image, cv2.COLOR_BGR2HSV)
         mouth_mask = self.get_mouth_mask(mouth_image_hsv)
@@ -53,11 +55,12 @@ class MouthExtractor:
 
         return self.apply_mask(mouth_image, mouth_mask_invert)
 
-
     def _sobel_mouth(self, mouth_image):
         mouth_image_gray = cv2.cvtColor(mouth_image, cv2.COLOR_BGR2GRAY)
-        mouth_image_gray_blur = cv2.GaussianBlur(mouth_image_gray, (3, 3), sigmaX=0, sigmaY=0)
-        sobelxy = cv2.Sobel(src=mouth_image_gray_blur, ddepth=cv2.CV_64F, dx=1, dy=1, ksize=31)
+        mouth_image_gray_blur = cv2.GaussianBlur(
+            mouth_image_gray, (3, 3), sigmaX=0, sigmaY=0)
+        sobelxy = cv2.Sobel(src=mouth_image_gray_blur,
+                            ddepth=cv2.CV_64F, dx=1, dy=1, ksize=31)
 
         magnitude = np.sqrt(np.square(sobelxy))
         magnitude *= 255.0 / magnitude.max()
@@ -66,7 +69,8 @@ class MouthExtractor:
 
     def _mouth_threshold_detection(self, mouth_image):
         mouth_image_gray = cv2.cvtColor(mouth_image, cv2.COLOR_BGR2GRAY)
-        retval, mouth_thresh = cv2.threshold(mouth_image_gray, 140, 255, cv2.THRESH_BINARY_INV)
+        retval, mouth_thresh = cv2.threshold(
+            mouth_image_gray, 140, 255, cv2.THRESH_BINARY_INV)
 
         open_kernel = self.create_kernel(19)
         close_kernel = self.create_kernel(9)
@@ -89,7 +93,6 @@ class MouthExtractor:
             return image
         mouth_rect = self.get_most_bottom_rect(mouth_rects)
         self.draw_mouth_boundaries(image, mouth_rect)
-
 
         return image
 
@@ -116,7 +119,8 @@ class MouthExtractor:
     def get_mouth_roi(self, face_rect):
         (fx, fy, fw, fh) = face_rect
         bottom_half_rect = (fx, fy + int(fh * 0.5), fw, int(fh * 0.5))
-        face_image_gray_cropped = self.get_image_slice_from_rect(self.image_gray, bottom_half_rect)
+        face_image_gray_cropped = self.get_image_slice_from_rect(
+            self.image_gray, bottom_half_rect)
 
         local_mouth_rects = self.mouth_cascade.detectMultiScale(
             face_image_gray_cropped,
@@ -141,7 +145,7 @@ class MouthExtractor:
     def draw_face_boundaries(self, image, face_rect):
         self.draw_rect(image, face_rect, (0, 255, 0), 12)
 
-    def draw_rect(self, image, rect, color=(0,0,0), thickness=1):
+    def draw_rect(self, image, rect, color=(0, 0, 0), thickness=1):
         (x, y, w, h) = rect
         cv2.rectangle(
             image,
