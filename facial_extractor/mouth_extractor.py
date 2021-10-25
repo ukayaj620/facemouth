@@ -38,7 +38,8 @@ class MouthExtractor:
         mask = self.create_hsv_color_mask(
             image_hsv, [4, 48, 15], [20, 255, 255])
         mask_closing = self.apply_closing(mask, self.create_kernel(size=9))
-        return self.apply_opening(mask_closing, self.create_kernel(size=9))
+        mask_opening = self.apply_opening(mask_closing, self.create_kernel(size=9))
+        return cv2.bitwise_not(mask_opening)
 
     def get_image_mouth(self):
         mouth_rects = self.get_mouth_rects()
@@ -51,9 +52,7 @@ class MouthExtractor:
         mouth_image_hsv = cv2.cvtColor(mouth_image, cv2.COLOR_BGR2HSV)
         mouth_mask = self.get_mouth_mask(mouth_image_hsv)
 
-        mouth_mask_invert = cv2.bitwise_not(mouth_mask)
-
-        return self.apply_mask(mouth_image, mouth_mask_invert)
+        return self.apply_mask(mouth_image, mouth_mask)
 
     # def _sobel_mouth(self, mouth_image):
     #     mouth_image_gray = cv2.cvtColor(mouth_image, cv2.COLOR_BGR2GRAY)
