@@ -84,7 +84,7 @@ class MartienFrame(tk.Frame):
         if self.filename != "":
             face_extractor = FaceExtractor()
             face_extractor.load_image(self.filename)
-            image = face_extractor.get_face()
+            image = face_extractor.get_face_contour()
 
             x = image.shape[1]
             y = image.shape[0]

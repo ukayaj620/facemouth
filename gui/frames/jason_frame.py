@@ -84,7 +84,7 @@ class JasonFrame(tk.Frame):
         if self.filename != "":
             face_extractor = FaceExtractor()
             face_extractor.load_image(self.filename)
-            image = face_extractor.get_face_contour()
+            image = face_extractor.get_face()
 
             x = image.shape[1]
             y = image.shape[0]
